@@ -1,0 +1,25 @@
+{
+  "name": "attendees",
+  "version": "0.1.0",
+  "description": "An example app to show Transit.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/frzng/attendees"
+  },
+  "keywords": [
+    "transit",
+    "json",
+    "example",
+    "app"
+  ],
+  "author": "Filip Zrůst <frzng@me.com> (https://twitter.com/frzng)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frzng/attendees/issues"
+  },
+  "homepage": "https://github.com/frzng/attendees"
+}
