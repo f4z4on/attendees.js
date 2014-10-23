@@ -2,6 +2,14 @@ var parse = require('co-body');
 var t = require("transit-js");
 
 var attendees = [
+  t.map([
+    t.keyword('name'), 'Filip Zrůst',
+    t.keyword('email'), t.uri('mailto:frzng@me.com')
+  ]),
+  t.map([
+    t.keyword('name'), 'Stojan Jakotyč',
+    t.keyword('email'), t.uri('mailto:sj@example.com')
+  ])
 ];
 
 module.exports = {
@@ -30,6 +38,18 @@ module.exports = {
 
     this.type = 'application/transit+json';
     this.body = JSON.stringify(attendees[id]);
+  },
+
+  db: function(verbose) {
+    if (verbose) {
+      return t.reader('json-verbose').read(
+        t.writer('json-verbose').write(attendees)
+      );
+    } else {
+      return JSON.parse(
+        t.writer('json').write(attendees)
+      );
+    }
   }
 
 };

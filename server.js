@@ -13,3 +13,8 @@ app.use(_.put('/attendees/:id', attendees.update));
 app.use(serve('public'));
 
 app.listen(3000);
+
+console.log('Listening on port 3000.');
+console.log('Inital database:', JSON.stringify(
+  attendees.db(process.argv[2] === '-v'), null, '  '
+));
