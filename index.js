@@ -1,17 +1,19 @@
 var parse = require('co-body');
+var t = require("transit-js");
 
-var attendees = [];
+var attendees = [
+];
 
 module.exports = {
 
   list: function*() {
-    this.type = 'application/json';
-    this.body = JSON.stringify(attendees);
+    this.type = 'application/transit+json';
+    this.body = t.writer().write(attendees);
   },
 
   index: function*(id) {
-    this.type = 'application/json';
-    this.body = JSON.stringify(attendees[id]);
+    this.type = 'application/transit+json';
+    this.body = t.writer().write(attendees[id]);
   },
 
   create: function*() {
@@ -26,7 +28,7 @@ module.exports = {
     attendees[id] = yield parse(this);
     console.log('Updated ' + id + ':', attendees[id]);
 
-    this.type = 'application/json';
+    this.type = 'application/transit+json';
     this.body = JSON.stringify(attendees[id]);
   }
 
