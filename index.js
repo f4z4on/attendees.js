@@ -1,31 +1,44 @@
 var parse = require('co-body');
 var t = require("transit-js");
 
-var attendees = [
-  t.map([
-    t.keyword('name'), 'Filip Zrůst',
-    t.keyword('email'), t.uri('mailto:frzng@me.com')
-  ]),
-  t.map([
-    t.keyword('name'), 'Stojan Jakotyč',
-    t.keyword('email'), t.uri('mailto:sj@example.com')
+var Attendee = function(name, email) {
+  this.name = name;
+  this.email = email;
+};
+var AttendeeHandler = t.makeWriteHandler({
+  tag: function() { return 'att'; },
+  rep: function(v) { return t.map([t.keyword('name'), v.name,
+                            t.keyword('email'), v.email]); }
+});
+
+var writer = t.writer('json', {
+  handlers: t.map([
+     Attendee, AttendeeHandler
   ])
+});
+
+var attendees = [
+  new Attendee('Filip Zrůst', t.uri('mailto:frzng@me.com')),
+  new Attendee('Stojan Jakotyč', t.uri('mailto:sj@example.com'))
 ];
 
 module.exports = {
 
   list: function*() {
     this.type = 'application/transit+json';
-    this.body = t.writer().write(attendees);
+    this.body = writer.write(attendees);
   },
 
   index: function*(id) {
     this.type = 'application/transit+json';
-    this.body = t.writer().write(attendees[id]);
+    this.body = writer.write(attendees[id]);
   },
 
   create: function*() {
-    var id = attendees.push(yield parse(this)) - 1;
+    var data = yield parse(this);
+    var id = attendees.push(new Attendee(
+      data.name, data.email
+    )) - 1;
     console.log('Created:', attendees[id]);
 
     this.status = 201;
@@ -33,7 +46,10 @@ module.exports = {
   },
 
   update: function*(id) {
-    attendees[id] = yield parse(this);
+    var data = yield parse(this);
+    attendees[id] = new Attendee(
+      data.name, data.email
+    );
     console.log('Updated ' + id + ':', attendees[id]);
 
     this.type = 'application/transit+json';
@@ -43,11 +59,11 @@ module.exports = {
   db: function(verbose) {
     if (verbose) {
       return t.reader('json-verbose').read(
-        t.writer('json-verbose').write(attendees)
+        t.writer('json-verbose', writer.options).write(attendees)
       );
     } else {
       return JSON.parse(
-        t.writer('json').write(attendees)
+        t.writer('json', writer.options).write(attendees)
       );
     }
   }
