@@ -1,5 +1,5 @@
 var parse = require('co-body');
-var t = require("transit-js");
+var t = require('transit-js');
 
 var Attendee = function(name, email) {
   this.name = name;
@@ -24,17 +24,17 @@ var attendees = [
 
 module.exports = {
 
-  list: function*() {
+  list: function *() {
     this.type = 'application/transit+json';
     this.body = writer.write(attendees);
   },
 
-  index: function*(id) {
+  index: function *(id) {
     this.type = 'application/transit+json';
     this.body = writer.write(attendees[id]);
   },
 
-  create: function*() {
+  create: function *() {
     var data = yield parse(this);
     var id = attendees.push(new Attendee(
       data.name, data.email
@@ -45,7 +45,7 @@ module.exports = {
     this.set('Location', '/attendees/' + id);
   },
 
-  update: function*(id) {
+  update: function *(id) {
     var data = yield parse(this);
     attendees[id] = new Attendee(
       data.name, data.email
