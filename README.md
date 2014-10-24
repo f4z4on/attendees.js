@@ -32,7 +32,7 @@ and try it yourself. Run the app in one terminal:
 npm start
 ```
 
-And test in other:
+And test it in other terminal. Get list of all attendees:
 
 ```bash
 curl -s localhost:3000/attendees
@@ -40,6 +40,8 @@ curl -s localhost:3000/attendees
 ```javascript
 []
 ```
+
+Add a new attendee:
 
 ```bash
 curl -i -H 'Content-Type: application/json' -d '{ "email": "frzng@me.com", "name": "Filip Zrůst" }' localhost:3000/attendees
@@ -49,6 +51,8 @@ HTTP/1.1 201 Created
 Location: /attendees/0
 
 ```
+
+Get list of all attendees again:
 
 ```bash
 curl -s localhost:3000/attendees
@@ -81,7 +85,7 @@ and try it yourself. Run the app in one terminal:
 npm start
 ```
 
-And test in other:
+And test it in other terminal. Get list of all attendees:
 
 ```bash
 curl -s localhost:3000/attendees
@@ -126,7 +130,7 @@ and try it yourself. Run the app in one terminal:
 npm start
 ```
 
-And test in other:
+And test it in other terminal. Get list of all attendees:
 
 ```bash
 curl -s localhost:3000/attendees
