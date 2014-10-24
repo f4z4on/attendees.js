@@ -73,6 +73,8 @@ You should have a clear understanding of we're trying to achieve.
 Storing data in global variable (not persistent). Data are attendee
 records with `email` and `name` keys.
 
+Don't forget to kill the server when moving to the next step.
+
 
 ### Transit in action
 
@@ -90,6 +92,17 @@ and try it yourself. Run the app in one terminal:
 npm install
 npm start
 ```
+
+If you want to see how Transit uses *JSON-Verbose* for debugging and
+how it looks, you can start the server this way:
+
+```bash
+npm start -- -v
+```
+
+During the initialization, it will output its in-memory database of
+attendees in JSON-Verbose. It doesn't respond to or expect requests in
+that format.
 
 And test it in other terminal. Get list of all attendees:
 
@@ -114,6 +127,8 @@ that it is in fact a map. You can also scalar elements with `:` and
 `r` tags for `keyword` and `URI` respectively.
 
 Also notice how caching works for map keys.
+
+Don't forget to kill the server when moving to the next step.
 
 *Note*: This step doesn't properly support `create` and `update`
  actions. This is because `co-body` should be replaced with Transit
@@ -159,6 +174,8 @@ curl -s localhost:3000/attendees
 
 See the custom tag `att` for composite element and that even the tag
 gets cached (if it is longer than three characters).
+
+Don't forget to kill the server when moving to the next step.
 
 *Note*: This step doesn't properly support `create` and `update`
  actions. This is because `co-body` should be replaced with Transit
@@ -211,7 +228,7 @@ curl -i -H 'Content-Type: application/transit+json' -d '[ "~#att", [ "^ ", "~:na
 ```
 ```http
 HTTP/1.1 201 Created
-Location: /attendees/0
+Location: /attendees/2
 
 ```
 
@@ -241,3 +258,5 @@ curl -s localhost:3000/attendees
   ]
 ]]
 ```
+
+Don't forget to kill the server when leaving…
