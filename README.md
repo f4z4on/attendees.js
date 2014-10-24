@@ -5,6 +5,11 @@ Only development version support Harmony at the moment, e.g.
 [0.11.14](http://blog.nodejs.org/2014/09/24/node-v0-11-14-unstable/).
 
 
+## Presentation
+
+Filip Zrůst - Transferring application data efficiently with Transit: https://speakerdeck.com/frzng/transferring-application-data-efficiently-with-transit
+
+
 ## Usage
 
 
@@ -12,7 +17,6 @@ Only development version support Harmony at the moment, e.g.
 
 ```bash
 git clone git@github.com:frzng/attendees.git
-npm install
 ```
 
 
@@ -29,6 +33,7 @@ Check the source code of
 and try it yourself. Run the app in one terminal:
 
 ```bash
+npm install
 npm start
 ```
 
@@ -64,7 +69,7 @@ curl -s localhost:3000/attendees
 }]
 ```
 
-You should have clear understanding of we're trying to achieve.
+You should have a clear understanding of we're trying to achieve.
 Storing data in global variable (not persistent). Data are attendee
 records with `email` and `name` keys.
 
@@ -82,6 +87,7 @@ Compare
 and try it yourself. Run the app in one terminal:
 
 ```bash
+npm install
 npm start
 ```
 
@@ -116,7 +122,7 @@ Also notice how caching works for map keys.
 
 ### Custom types in action
 
-Now with custom composite type for `Attendee` record:
+Now with custom composite type writer for `Attendee` record:
 
 ```bash
 git checkout step-3-custom
@@ -127,6 +133,7 @@ Compare
 and try it yourself. Run the app in one terminal:
 
 ```bash
+npm install
 npm start
 ```
 
@@ -157,3 +164,80 @@ gets cached (if it is longer than three characters).
 *Note*: This step doesn't properly support `create` and `update`
  actions. This is because `co-body` should be replaced with Transit
  reader.
+
+
+### Add and modify attendees
+
+Now with custom composite type reader for `Attendee` record:
+
+```bash
+git checkout step-4-reader
+```
+
+Compare
+[changes from step 3 to step 4](https://github.com/frzng/attendees/compare/step-3-custom...step-4-reader?diff=split).
+and try it yourself. Run the app in one terminal:
+
+```bash
+npm install
+npm start
+```
+
+And test it in other terminal. Get list of all attendees:
+
+```bash
+curl -s localhost:3000/attendees
+```
+```javascript
+[[
+  "~#att", [
+    "^ ",
+    "~:name", "Filip Zrůst",
+    "~:email", "~rmailto:frzng@me.com"
+  ]
+], [
+  "^0", [
+    "^ ",
+    "^1", "Stojan Jakotyč",
+    "^2", "~rmailto:sj@example.com"
+  ]
+]]
+```
+
+Add a new attendee:
+
+```bash
+curl -i -H 'Content-Type: application/transit+json' -d '[ "~#att", [ "^ ", "~:name", "Tomáš Marný", "~:email", "~rmailto:sj@example.com" ] ]' localhost:3000/attendees
+```
+```http
+HTTP/1.1 201 Created
+Location: /attendees/0
+
+```
+
+Get list of all attendees again:
+
+```bash
+curl -s localhost:3000/attendees
+```
+```javascript
+[[
+  "~#att", [
+    "^ ",
+    "~:name", "Filip Zrůst",
+    "~:email", "~rmailto:frzng@me.com"
+  ]
+], [
+  "^0", [
+    "^ ",
+    "^1", "Stojan Jakotyč",
+    "^2", "~rmailto:sj@example.com"
+  ]
+], [
+  "^0", [
+    "^ ",
+    "^1", "Tomáš Marný",
+    "^2", "~rmailto:sj@example.com"
+  ]
+]]
+```

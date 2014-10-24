@@ -1,20 +1,27 @@
-var parse = require('co-body');
+var getRawBody = require('raw-body');
 var t = require('transit-js');
 
 var Attendee = function(name, email) {
   this.name = name;
   this.email = email;
 };
-var AttendeeHandler = t.makeWriteHandler({
+
+var AttendeeWriteHandler = t.makeWriteHandler({
   tag: function() { return 'att'; },
   rep: function(v) { return t.map([t.keyword('name'), v.name,
                             t.keyword('email'), v.email]); }
 });
-
 var writer = t.writer('json', {
   handlers: t.map([
-     Attendee, AttendeeHandler
+     Attendee, AttendeeWriteHandler
   ])
+});
+
+var reader = t.reader('json', {
+  handlers: {
+    'att': function (rep) { return new Attendee(rep.get(t.keyword('name')),
+                                        rep.get(t.keyword('email'))); }
+  }
 });
 
 var attendees = [
@@ -35,10 +42,12 @@ module.exports = {
   },
 
   create: function *() {
-    var data = yield parse(this);
-    var id = attendees.push(new Attendee(
-      data.name, data.email
-    )) - 1;
+    var rawBody = yield getRawBody(this.req, {
+      length: this.length,
+      limit: '1mb',
+      encoding: this.request.charset || 'utf8'
+    });
+    var id = attendees.push(reader.read(rawBody)) - 1;
     console.log('Created:', attendees[id]);
 
     this.status = 201;
@@ -46,14 +55,16 @@ module.exports = {
   },
 
   update: function *(id) {
-    var data = yield parse(this);
-    attendees[id] = new Attendee(
-      data.name, data.email
-    );
+    var rawBody = yield getRawBody(this.req, {
+      length: this.length,
+      limit: '1mb',
+      encoding: this.request.charset || 'utf8'
+    });
+    attendees[id] = reader.read(rawBody);
     console.log('Updated ' + id + ':', attendees[id]);
 
     this.type = 'application/transit+json';
-    this.body = JSON.stringify(attendees[id]);
+    this.body = writer.write(attendees[id]);
   },
 
   db: function(verbose) {
