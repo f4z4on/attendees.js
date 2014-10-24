@@ -133,7 +133,6 @@ Compare
 and try it yourself. Run the app in one terminal:
 
 ```bash
-npm install
 npm start
 ```
 
@@ -180,6 +179,7 @@ and try it yourself. Run the app in one terminal:
 
 ```bash
 npm install
+npm prune
 npm start
 ```
 
