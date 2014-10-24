@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/frzng/attendees"
+    "url": "http://github.com/frzng/attendees.js"
   },
   "keywords": [
     "transit",
@@ -20,9 +20,9 @@
   "author": "Filip Zrůst <frzng@me.com> (https://twitter.com/frzng)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/frzng/attendees/issues"
+    "url": "https://github.com/frzng/attendees.js/issues"
   },
-  "homepage": "https://github.com/frzng/attendees",
+  "homepage": "https://github.com/frzng/attendees.js",
   "dependencies": {
     "koa": "^0.13.0",
     "koa-route": "^2.2.0",

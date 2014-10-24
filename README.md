@@ -16,7 +16,7 @@ Filip Zrůst - Transferring application data efficiently with Transit: https://s
 ### Get the project
 
 ```bash
-git clone git@github.com:frzng/attendees.git
+git clone https://github.com/frzng/attendees.js.git
 ```
 
 
